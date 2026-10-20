@@ -654,13 +654,66 @@ CMD ["npx", "tsx", "server.ts"]
     name: engineering-student-predictor
     env: node
     plan: free
-    buildCommand: npm install && node scripts/generate_project_report_pdf.cjs && npm run build
-    startCommand: npx tsx server.ts
+    buildCommand: npm install --include=dev && npm run build
+    startCommand: npm start
     envVars:
+      - key: NODE_VERSION
+        value: 22.14.0
       - key: NODE_ENV
         value: production
       - key: PORT
         value: 10000
+`,
+  },
+  {
+    path: 'package.json',
+    name: 'package.json',
+    language: 'json',
+    category: 'backend',
+    description: 'Node.js dependencies and production build scripts for Render, Docker, and Cloud Run',
+    content: `{
+  "name": "engineering-student-performance-predictor",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx server.ts",
+    "start": "tsx server.ts",
+    "build": "node scripts/generate_project_report_pdf.cjs && vite build",
+    "preview": "vite preview",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@google/genai": "^2.4.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "@vitejs/plugin-react": "^6.1.1",
+    "dotenv": "^17.2.3",
+    "express": "^4.21.2",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.9",
+    "jszip": "^3.10.2",
+    "lucide-react": "^0.546.0",
+    "motion": "^12.23.24",
+    "react": "^19.0.1",
+    "react-dom": "^19.0.1",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.21.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/jszip": "^3.4.1",
+    "@types/node": "^22.14.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "autoprefixer": "^10.4.21",
+    "esbuild": "^0.25.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
 `,
   },
 ];
