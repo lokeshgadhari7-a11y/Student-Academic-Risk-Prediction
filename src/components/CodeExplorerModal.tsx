@@ -14,7 +14,9 @@ import {
   Archive,
   Layers,
   Sparkles,
+  FileText,
 } from 'lucide-react';
+import { generateAndDownloadProjectReportPDF } from '../utils/generatePdfReport';
 
 interface CodeExplorerModalProps {
   isOpen: boolean;
@@ -117,6 +119,14 @@ flutter run
           </div>
 
           <div className="flex items-center gap-2">
+            <button
+              onClick={() => generateAndDownloadProjectReportPDF()}
+              className="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-colors shadow-sm"
+              title="Download exhaustive 10-page final project report PDF"
+            >
+              <FileText className="w-4 h-4" />
+              <span>Project Report (PDF)</span>
+            </button>
             <button
               onClick={handleDownloadAllZip}
               disabled={isZipping}

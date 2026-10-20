@@ -3,6 +3,7 @@ import { createServer as createViteServer } from 'vite';
 import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
 import path from 'path';
+import fs from 'fs';
 
 dotenv.config();
 
@@ -141,6 +142,30 @@ YOUR ROLE:
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ status: 'healthy', service: 'Engineering Performance Server' });
+});
+
+// Official Final Project Report PDF endpoints
+app.get('/api/download-report-pdf', (req, res) => {
+  const prodPdf = path.resolve('dist/Engineering_Student_Performance_Final_Project_Report.pdf');
+  const publicPdf = path.resolve('public/Engineering_Student_Performance_Final_Project_Report.pdf');
+  const pdfPath = fs.existsSync(prodPdf) ? prodPdf : publicPdf;
+  if (fs.existsSync(pdfPath)) {
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename="Engineering_Student_Performance_Final_Project_Report.pdf"');
+    return res.sendFile(pdfPath);
+  }
+  return res.status(404).json({ error: 'Report PDF not found' });
+});
+
+app.get('/Engineering_Student_Performance_Final_Project_Report.pdf', (req, res) => {
+  const prodPdf = path.resolve('dist/Engineering_Student_Performance_Final_Project_Report.pdf');
+  const publicPdf = path.resolve('public/Engineering_Student_Performance_Final_Project_Report.pdf');
+  const pdfPath = fs.existsSync(prodPdf) ? prodPdf : publicPdf;
+  if (fs.existsSync(pdfPath)) {
+    res.setHeader('Content-Type', 'application/pdf');
+    return res.sendFile(pdfPath);
+  }
+  return res.status(404).send('PDF not found');
 });
 
 // Setup Vite middleware in dev or serve dist in production

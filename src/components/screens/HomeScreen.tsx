@@ -1,5 +1,6 @@
 import React from 'react';
 import { collegeDatasetInfo } from '../../data/datasets';
+import { generateAndDownloadProjectReportPDF } from '../../utils/generatePdfReport';
 import {
   GraduationCap,
   Sparkles,
@@ -13,14 +14,17 @@ import {
   Activity,
   Bot,
   MessageSquare,
+  FileText,
+  Download,
 } from 'lucide-react';
 
 interface HomeScreenProps {
   onNavigate: (screen: string) => void;
   isBackendOnline: boolean;
+  onOpenReport?: () => void;
 }
 
-export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate, isBackendOnline }) => {
+export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate, isBackendOnline, onOpenReport }) => {
   return (
     <div className="space-y-6 pb-8">
       {/* Welcome Banner */}
@@ -81,6 +85,48 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate, isBackendOnl
           <div className="self-end sm:self-auto shrink-0 flex items-center gap-2 bg-white text-indigo-900 text-xs font-bold px-4 py-2.5 rounded-xl shadow-xs group-hover:bg-indigo-50 transition-colors">
             <span>Launch Advisor Chat</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+          </div>
+        </div>
+      </div>
+
+      {/* Official Final Project Report (PDF) Card */}
+      <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-5 rounded-2xl border border-indigo-500/30 shadow-md relative overflow-hidden">
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3.5">
+            <div className="p-3 bg-emerald-500/20 text-emerald-300 rounded-2xl border border-emerald-500/30">
+              <FileText className="w-7 h-7" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="font-bold text-base text-white">
+                  Official Final Project Technical Report
+                </h3>
+                <span className="bg-emerald-400 text-slate-950 text-[10px] font-extrabold px-2 py-0.5 rounded-full">
+                  10-Page PDF
+                </span>
+              </div>
+              <p className="text-xs text-slate-300 mt-1 max-w-xl leading-relaxed">
+                Exhaustive academic capstone documentation covering the 10-point CGPA framework, 150 student instances, noise elimination audit, PCA (91.8% variance) vs. LDA, Random Forest/SVM benchmarks, and 3-tier intervention protocols.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
+            {onOpenReport && (
+              <button
+                onClick={onOpenReport}
+                className="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-3.5 py-2.5 rounded-xl border border-slate-700 transition-colors"
+              >
+                View Report
+              </button>
+            )}
+            <button
+              onClick={() => generateAndDownloadProjectReportPDF()}
+              className="inline-flex items-center gap-1.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 text-xs font-bold px-4 py-2.5 rounded-xl shadow-xs transition-all"
+            >
+              <Download className="w-4 h-4" />
+              <span>Download PDF</span>
+            </button>
           </div>
         </div>
       </div>
@@ -181,6 +227,13 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate, isBackendOnl
             description="MDI Feature Ranking & Causation Principles"
             icon={<Lightbulb className="w-5 h-5 text-orange-600" />}
             onClick={() => onNavigate('insights')}
+          />
+          <ModuleButton
+            title="Final Project Report"
+            description="Exhaustive 10-Page Capstone PDF Report"
+            icon={<FileText className="w-5 h-5 text-emerald-600" />}
+            onClick={() => onOpenReport ? onOpenReport() : generateAndDownloadProjectReportPDF()}
+            highlight
           />
           <ModuleButton
             title="About Project"

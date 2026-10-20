@@ -14,6 +14,8 @@ import { DatasetExplorerScreen } from './components/screens/DatasetExplorerScree
 import { InsightsScreen } from './components/screens/InsightsScreen';
 import { AboutScreen } from './components/screens/AboutScreen';
 import { CodeExplorerModal } from './components/CodeExplorerModal';
+import { ReportViewerModal } from './components/ReportViewerModal';
+import { generateAndDownloadProjectReportPDF } from './utils/generatePdfReport';
 
 import {
   Home,
@@ -27,15 +29,18 @@ import {
   Smartphone,
   Monitor,
   FileCode,
+  FileText,
   GraduationCap,
   Sparkles,
   Wifi,
+  Download,
 } from 'lucide-react';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<string>('splash');
   const [isMobileFrame, setIsMobileFrame] = useState<boolean>(false);
   const [isCodeModalOpen, setIsCodeModalOpen] = useState<boolean>(false);
+  const [isReportModalOpen, setIsReportModalOpen] = useState<boolean>(false);
   const [isBackendOnline, setIsBackendOnline] = useState<boolean>(true);
 
   // Synchronized student profile state passed between Predict and AI Chatbot
@@ -126,6 +131,16 @@ export default function App() {
               </button>
             </div>
 
+            {/* Project Report PDF Button */}
+            <button
+              onClick={() => setIsReportModalOpen(true)}
+              className="inline-flex items-center gap-1.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-3.5 py-1.5 rounded-xl font-bold shadow-sm transition-all"
+              title="View and download comprehensive final project technical report (PDF)"
+            >
+              <FileText className="w-4 h-4 text-emerald-200" />
+              <span>Project Report (PDF)</span>
+            </button>
+
             {/* View Codebase & ZIP Download Button */}
             <button
               onClick={() => setIsCodeModalOpen(true)}
@@ -204,6 +219,7 @@ export default function App() {
               <HomeScreen
                 onNavigate={(screen) => setCurrentScreen(screen)}
                 isBackendOnline={isBackendOnline}
+                onOpenReport={() => setIsReportModalOpen(true)}
               />
             )}
 
@@ -234,7 +250,9 @@ export default function App() {
 
             {currentScreen === 'insights' && <InsightsScreen />}
 
-            {currentScreen === 'about' && <AboutScreen />}
+            {currentScreen === 'about' && (
+              <AboutScreen onOpenReport={() => setIsReportModalOpen(true)} />
+            )}
           </div>
 
           {/* Material 3 Bottom Navigation Bar */}
@@ -283,6 +301,12 @@ export default function App() {
       <CodeExplorerModal
         isOpen={isCodeModalOpen}
         onClose={() => setIsCodeModalOpen(false)}
+      />
+
+      {/* Official Project Report Modal */}
+      <ReportViewerModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
       />
     </div>
   );

@@ -12,22 +12,83 @@ import {
   Workflow,
   BarChart2,
   SlidersHorizontal,
+  FileText,
+  Download,
+  Server,
+  Globe,
+  ExternalLink,
+  Terminal,
 } from 'lucide-react';
+import { generateAndDownloadProjectReportPDF } from '../../utils/generatePdfReport';
 
-export const AboutScreen: React.FC = () => {
+interface AboutScreenProps {
+  onOpenReport?: () => void;
+}
+
+export const AboutScreen: React.FC<AboutScreenProps> = ({ onOpenReport }) => {
   return (
     <div className="space-y-6 pb-8">
       {/* Header */}
-      <div className="border-b border-gray-200 pb-4">
-        <span className="text-xs font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-md">
-          Academic Project Dossier • Third-Year AI & Data Science
-        </span>
-        <h1 className="text-xl font-bold text-gray-900 mt-1">
-          About: Engineering Student Performance & At-Risk Prediction System
-        </h1>
-        <p className="text-xs text-gray-500 mt-0.5">
-          Comprehensive project report documentation, system architecture, methodology, and Machine Learning Laboratory syllabus mapping.
-        </p>
+      <div className="border-b border-gray-200 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <span className="text-xs font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-md">
+            Academic Project Dossier • Third-Year AI & Data Science
+          </span>
+          <h1 className="text-xl font-bold text-gray-900 mt-1">
+            About: Engineering Student Performance & At-Risk Prediction System
+          </h1>
+          <p className="text-xs text-gray-500 mt-0.5">
+            Comprehensive project report documentation, system architecture, methodology, and Machine Learning Laboratory syllabus mapping.
+          </p>
+        </div>
+
+        <button
+          onClick={() => generateAndDownloadProjectReportPDF()}
+          className="self-start sm:self-auto inline-flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-sm transition-all"
+        >
+          <Download className="w-4 h-4" />
+          <span>Download PDF Report</span>
+        </button>
+      </div>
+
+      {/* Official Project Report PDF Banner */}
+      <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-5 rounded-2xl border border-indigo-500/30 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-start gap-3.5">
+          <div className="p-3 bg-emerald-500/20 text-emerald-300 rounded-2xl border border-emerald-500/30 shrink-0">
+            <FileText className="w-6 h-6" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h3 className="font-bold text-sm text-white">
+                Official Capstone Final Project Report (10-Page PDF)
+              </h3>
+              <span className="bg-emerald-400 text-slate-950 text-[10px] font-extrabold px-2 py-0.5 rounded-full">
+                Formal Academic Dossier
+              </span>
+            </div>
+            <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+              Complete publication-grade documentation containing abstract, 10-point CGPA formulations, 150 student instances, PCA vs LDA variance mathematical proofs, Random Forest and SVM benchmarks, confusion matrices, and ethical guidelines.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
+          {onOpenReport && (
+            <button
+              onClick={onOpenReport}
+              className="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-3 py-2 rounded-xl border border-slate-700 transition-colors"
+            >
+              Read in Viewer
+            </button>
+          )}
+          <button
+            onClick={() => generateAndDownloadProjectReportPDF()}
+            className="inline-flex items-center gap-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold px-3.5 py-2 rounded-xl shadow-xs transition-colors"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>Download PDF</span>
+          </button>
+        </div>
       </div>
 
       {/* Problem Statement and Core Objectives */}
@@ -191,6 +252,72 @@ export const AboutScreen: React.FC = () => {
               ))}
             </tbody>
           </table>
+        </div>
+      </div>
+
+      {/* Cloud Hosting & Deployment Guide */}
+      <div className="bg-slate-900 text-white rounded-2xl p-5 shadow-sm space-y-4 border border-slate-800">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 bg-indigo-600 rounded-xl">
+              <Server className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h3 className="font-bold text-sm text-white">
+                Cloud Hosting & Live Deployment Specifications
+              </h3>
+              <p className="text-[11px] text-slate-400">
+                Pre-configured for zero-setup deployment on Google Cloud Run, Render, Railway, and Docker
+              </p>
+            </div>
+          </div>
+          <span className="text-[10px] font-mono bg-emerald-950 text-emerald-300 border border-emerald-800 px-2.5 py-1 rounded-full font-bold self-start sm:self-auto flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span>Currently Live on Cloud Run</span>
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+          <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/80 space-y-1.5">
+            <div className="flex items-center gap-1.5 text-indigo-300 font-bold">
+              <Globe className="w-4 h-4" />
+              <span>Public Live Share URL</span>
+            </div>
+            <p className="text-[11px] text-slate-300 break-all font-mono select-all bg-slate-950/60 p-1.5 rounded-lg border border-slate-800">
+              https://ais-pre-2kxyjcxspnagsbbq7yvbij-354422128157.asia-northeast1.run.app
+            </p>
+            <p className="text-[10px] text-slate-400">
+              Live link to share with college professors, viva evaluators, and project guides immediately.
+            </p>
+          </div>
+
+          <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/80 space-y-1.5">
+            <div className="flex items-center gap-1.5 text-emerald-300 font-bold">
+              <Terminal className="w-4 h-4" />
+              <span>1-Click Render.com / Railway</span>
+            </div>
+            <p className="text-[11px] text-slate-300 font-mono bg-slate-950/60 p-1.5 rounded-lg border border-slate-800">
+              Build: npm run build<br />
+              Start: npm start
+            </p>
+            <p className="text-[10px] text-slate-400">
+              Includes pre-configured <code className="text-indigo-300">render.yaml</code> and <code className="text-indigo-300">Procfile</code> for free cloud hosting.
+            </p>
+          </div>
+
+          <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/80 space-y-1.5">
+            <div className="flex items-center gap-1.5 text-amber-300 font-bold">
+              <Layers className="w-4 h-4" />
+              <span>Docker Production Image</span>
+            </div>
+            <p className="text-[11px] text-slate-300 font-mono bg-slate-950/60 p-1.5 rounded-lg border border-slate-800">
+              docker build -t app .<br />
+              docker run -p 3000:3000 app
+            </p>
+            <p className="text-[10px] text-slate-400">
+              Multi-stage alpine Dockerfile ready for AWS EC2, DigitalOcean, or private college servers.
+            </p>
+          </div>
         </div>
       </div>
 
